@@ -2,16 +2,22 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>ZIM Frame - Fit Template</title>
+<title>ZIM Mobile with MVC</title>
 
-<!-- Welcome to ZIM at https://zimjs.com - Code Creativity!              	        -->
+<!-- Welcome to ZIM at https://zimjs.com - Code Creativity!                              -->
 <!-- ZIM runs on the HTML Canvas powered by JavaScript and CreateJS https://createjs.com -->
-<!-- Founded by Inventor Dan Zen - https://danzen.com - Canadian New Media Award Winner 	-->
-<!-- ZIM is free to use. You can donate to help improve ZIM at https://zimjs.com/donate 	-->
+<!-- Founded by Inventor Dan Zen - http://danzen.com - Canadian New Media Award Winner   -->
+<!-- ZIM is free to use. You can donate to help improve ZIM at https://zimjs.com/donate  -->
 
 <script src="https://d309knd7es5f10.cloudfront.net/createjs_1.1_min.js"></script>
-<script src="https://d309knd7es5f10.cloudfront.net/zim_10.js"></script>
+<script src="https://d309knd7es5f10.cloudfront.net/zim_10.0.1.js"></script>
 <!-- use zimjs.com/distill for minified individual functions! -->
+
+<script src="https://d309knd7es5f10.cloudfront.net/pizzazz_02.js"></script>
+
+<script src="scripts/model.js"></script>
+<script src="scripts/view.js"></script>
+<script src="scripts/controller.js"></script>
 
 <script>
 
@@ -22,13 +28,13 @@
 // "full"	sets stage to window size with no scaling
 // "tagID"	add canvas to HTML tag of ID - set to dimensions if provided - no scaling
 
-var scaling = "fit"; // this will resize to fit inside the screen dimensions
-var width = 1024;
-var height = 768;
-var color = light; // ZIM colors like green, blue, pink, faint, clear, etc. available globally
-var outerColor = dark; // any HTML colors like "violet", "#333", etc. fine to use
+var scaling = "full"; // this will resize to fit inside the screen dimensions
+var color = light; // ZIM colors like green, blue, pink, faint, clear, etc.
+var outerColor = dark; // any HTML colors like "violet", "#333", etc. are fine to use
+var assets = ["line.png","circle.png","1.png","2.png","3.png","rot1.png","rot2.png","rot3.png"];
+var path = "assets/";
 
-var frame = new Frame(scaling, width, height, color, outerColor);
+var frame = new Frame(scaling, null, null, color, outerColor, assets, path, new Waiter());
 frame.on("ready", function() {
     zog("ready from ZIM Frame"); // logs in console (F12 - choose console)
 
@@ -36,21 +42,30 @@ frame.on("ready", function() {
     var stageW = frame.width;
     var stageH = frame.height;
 
-    // see https://zimjs.com/learn.html for video and code tutorials
-    // see https://zimjs.com/docs.html for documentation
-    // see https://zimjs.com/bits.html for 64 Interactive Media techniques
+    // pizzazz.listIcons();
 
-    // put your code here (you can delete this sample code)
+    const m = app.makeModel();
+    const v = app.makeView(m, stage);
+    const c = app.makeController(m, v, stage);
 
-    // with chaining - can also assign to a variable for later access
-    new Circle(100, pink)
-        .center()
-        .drag();
+    let lines = new Container(stageW,stageH).addTo();
+    // let line1 = frame.asset("line.png").addTo(lines).sca(0.38,0.7).pos(371,27).place();
+    // let line2 = line1.clone().addTo(lines).sca(0.29,0.7).pos(588,27).place();
+    // let line3 = line1.clone().addTo(lines).sca(0.39,0.7).pos(311,204).rot(-40).place();
+    // let line4 = line1.clone().addTo(lines).sca(0.38,0.7).pos(667,59).rot(32).place();
+    // let line5 = line1.clone().addTo(lines).sca(0.18,0.7).pos(737,201).rot(90).place();
+    // let line6 = line1.clone().addTo(lines).sca(0.24,0.7).pos(429,136).rot(-75).place();
+    // let line7 = line1.clone().addTo(lines).sca(0.28,0.7).pos(631,-117).place();
+    // let line8 = line1.clone().addTo(lines).sca(0.27,0.7).pos(564,-32).rot(40).place();
 
-    // without chaining
-    // var circle = new Circle(100, pink);
-    // circle.center();
-    // circle.drag();
+    frame.on("resize", () => {
+
+        // lines.center();
+        // stage.resize();
+
+        stage.update();
+    });
+
 
     stage.update(); // this is needed to show any changes
 
